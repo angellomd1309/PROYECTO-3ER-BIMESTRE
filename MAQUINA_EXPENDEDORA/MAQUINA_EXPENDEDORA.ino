@@ -30,8 +30,7 @@ const char mensajeProcesando[] = "PROCESANDO...";
 int seleccion = 0; //Variable para guardar la selección del usuario
 LiquidCrystal_I2C lcd(0x20, 16, 2); // Construimos el I2C
     int SELECMOTOR;
-    unsigned long duracion = 5000;
-    unsigned long tiempoInicio = millis();
+      int pos = 0;
 
 void setup() {
 
@@ -61,12 +60,10 @@ void setup() {
 void loop() {
   if (digitalRead(boton1Pin) == LOW) {
     SELECMOTOR = 1;
-    seleccion = 1;
     lcd.clear();
     lcd.print(mensajeMoneda);}
 
   if (digitalRead(obstaculoPin) == LOW) {
-    tiempoInicio = 0;
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(mensajeProcesando);
@@ -78,12 +75,10 @@ void loop() {
   // Verificar si se ha presionado algún botón
     if (digitalRead(boton2Pin) == LOW) {
     SELECMOTOR = 2;
-    seleccion = 2;
     lcd.clear();
     lcd.print(mensajeMoneda);}
     //Si hay deteccion de la moneda, el codigo proseguira.
   if (digitalRead(obstaculoPin) == LOW) {
-    tiempoInicio = 0;
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(mensajeProcesando);
@@ -94,12 +89,16 @@ void loop() {
   
 
 void ejecutarMotor(void) {
+
+
+
   
-  int demora = 2.0;
+  
+  int demora = 100;
 
 
   if (SELECMOTOR == 1) {  
-  while (millis() - tiempoInicio < duracion) {
+  for (pos = 0; pos <= 10; pos += 1){
 
   digitalWrite(4, HIGH); //PASO 1
   digitalWrite(5, LOW);
@@ -153,7 +152,7 @@ void ejecutarMotor(void) {
 
 
   else if (SELECMOTOR == 2) {  
-  while (millis() - tiempoInicio < duracion) {
+  for (pos = 0; pos <= 10; pos += 1){
 
    digitalWrite(8, HIGH); //PASO 1
   digitalWrite(9, LOW);
@@ -227,8 +226,7 @@ void ejecutarMotor(void) {
 }
 
 void reiniciar() { //Funcion para reiniciar
-  seleccion = 0;
-  tiempoInicio = tiempoInicio-5000;
+  pos = 0;
   SELECMOTOR = 0;
   lcd.clear();
   lcd.setCursor(0,0);
