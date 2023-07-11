@@ -22,18 +22,19 @@ const int motor2Pins[] = {8, 9, 10, 11};
 
 const int obstaculoPin = 12; //Detector de monedas(el sensor de obstaculos
 
-const char mensajeInicial[] = "SELECCIONE PRODUCTO"; //Hacemos un const char con los mensajes, para ahorrar algo de tiempo.
+const char mensajeInicial[] = "SELECCIONE"; //Hacemos un const char con los mensajes, para ahorrar algo de tiempo.
+const char mensajeInicial2[] = "PRODUCTO"; //Hacemos un const char con los mensajes, para ahorrar algo de tiempo.
 const char mensajeMoneda[] = "INSERTE MONEDA";
 const char mensajeProcesando[] = "PROCESANDO...";
 
 int seleccion = 0; //Variable para guardar la selección del usuario
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Construimos el I2C
-
-int DARPRODUCTO;
-
-void AUTORIZACION(void);
+LiquidCrystal_I2C lcd(0x20, 16, 2); // Construimos el I2C
+    int SELECMOTOR;
+    unsigned long duracion = 5000;
+    unsigned long tiempoInicio = millis();
 
 void setup() {
+
   // Configurar los pines de los botones como entradas
   pinMode(boton1Pin, INPUT_PULLUP);
   pinMode(boton2Pin, INPUT_PULLUP);
@@ -50,81 +51,190 @@ void setup() {
   // Inicializar el LCD
   lcd.init();
   lcd.backlight();
+  lcd.setCursor(0,0);
   lcd.print(mensajeInicial);
+  delay(100);
+  lcd.setCursor(0,1);
+  lcd.print(mensajeInicial2);
 }
 
 void loop() {
-  AUTORIZACION();
-  
-  // Verificar si se ha presionado algún botón
   if (digitalRead(boton1Pin) == LOW) {
+    SELECMOTOR = 1;
     seleccion = 1;
     lcd.clear();
-    lcd.print(mensajeMoneda);
-    //Si hay deteccion de la moneda, el codigo proseguira.
-  if (AUTORIZACION == LOW) {
+    lcd.print(mensajeMoneda);}
+
+  if (digitalRead(obstaculoPin) == LOW) {
+    tiempoInicio = 0;
+    lcd.clear();
+    lcd.setCursor(0,0);
     lcd.print(mensajeProcesando);
-    delay(1000);
-    ejecutarMotor(seleccion);
+    ejecutarMotor();
+    SELECMOTOR = 0;
     reiniciar();
-    } }
+    }  
     
   // Verificar si se ha presionado algún botón
-    else if (digitalRead(boton2Pin) == LOW) {
+    if (digitalRead(boton2Pin) == LOW) {
+    SELECMOTOR = 2;
     seleccion = 2;
     lcd.clear();
-    lcd.print(mensajeMoneda);
+    lcd.print(mensajeMoneda);}
     //Si hay deteccion de la moneda, el codigo proseguira.
-  if (AUTORIZACION == LOW) {
+  if (digitalRead(obstaculoPin) == LOW) {
+    tiempoInicio = 0;
+    lcd.clear();
+    lcd.setCursor(0,0);
     lcd.print(mensajeProcesando);
-    delay(1000);
-    ejecutarMotor(seleccion);
+    ejecutarMotor();
+    SELECMOTOR = 0;    
     reiniciar();
     } }
-  }
+  
 
-void ejecutarMotor(int motor) {
-  // Mover el motor durante 5 segundos
-  unsigned long tiempoInicio = millis();
-  unsigned long duracion = 5000; //5 Segundos
+void ejecutarMotor(void) {
+  
+  int demora = 2.0;
 
-  if (motor == 1) {
-    while (millis() - tiempoInicio < duracion) {
-      for (int i = 0; i < 4; i++) {
-        for (int pin = 0; pin < 4; pin++) {
-          digitalWrite(motor1Pins[pin], (i == pin) ? HIGH : LOW);
-        }
-        delay(5);
-      }
+
+  if (SELECMOTOR == 1) {  
+  while (millis() - tiempoInicio < duracion) {
+
+  digitalWrite(4, HIGH); //PASO 1
+  digitalWrite(5, LOW);
+  digitalWrite(6, LOW);
+  digitalWrite(7, HIGH);
+  delay(demora);
+
+  digitalWrite(4, LOW); //PASO 2
+  digitalWrite(5, LOW);
+  digitalWrite(6, LOW);
+  digitalWrite(7, HIGH);
+  delay(demora);
+
+  digitalWrite(4, LOW); //PASO 3
+  digitalWrite(5, LOW);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, HIGH);
+  delay(demora);
+
+  digitalWrite(4, LOW); //PASO 4
+  digitalWrite(5, LOW);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, LOW);
+  delay(demora);
+
+  digitalWrite(4, LOW); //PASO 5
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, LOW);
+  delay(demora);
+
+  digitalWrite(4, LOW); //PASO 6
+  digitalWrite(5, HIGH);
+  digitalWrite(6, LOW);
+  digitalWrite(7, LOW);
+  delay(demora);
+
+  digitalWrite(4, HIGH); //PASO 7
+  digitalWrite(5, HIGH);
+  digitalWrite(6, LOW);
+  digitalWrite(7, LOW);
+  delay(demora);
+
+  digitalWrite(4, HIGH); //PASO 8
+  digitalWrite(5, LOW);
+  digitalWrite(6, LOW);
+  digitalWrite(7, LOW);
+  delay(demora);
+      
+    } }
+
+
+  else if (SELECMOTOR == 2) {  
+  while (millis() - tiempoInicio < duracion) {
+
+   digitalWrite(8, HIGH); //PASO 1
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(11, HIGH);
+  delay(demora);
+
+  digitalWrite(8, LOW); //PASO 2
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(11, HIGH);
+  delay(demora);
+
+  digitalWrite(8, LOW); //PASO 3
+  digitalWrite(9, LOW);
+  digitalWrite(10, HIGH);
+  digitalWrite(11, HIGH);
+  delay(demora);
+
+  digitalWrite(8, LOW); //PASO 4
+  digitalWrite(9, LOW);
+  digitalWrite(10, HIGH);
+  digitalWrite(11, LOW);
+  delay(demora);
+
+  digitalWrite(8, LOW); //PASO 5
+  digitalWrite(9, HIGH);
+  digitalWrite(10, HIGH);
+  digitalWrite(11, LOW);
+  delay(demora);
+
+  digitalWrite(8, LOW); //PASO 6
+  digitalWrite(9, HIGH);
+  digitalWrite(10, LOW);
+  digitalWrite(11, LOW);
+  delay(demora);
+
+  digitalWrite(8, HIGH); //PASO 7
+  digitalWrite(9, HIGH);
+  digitalWrite(10, LOW);
+  digitalWrite(11, LOW);
+  delay(demora);
+
+  digitalWrite(8, HIGH); //PASO 8
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(11, LOW);
+  delay(demora);
+      
+    } }
+
+    else {
+  digitalWrite(8, LOW); //PASO 8
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(11, LOW);
+
+  digitalWrite(4, LOW); //PASO 8
+  digitalWrite(5, LOW);
+  digitalWrite(6, LOW);
+  digitalWrite(7, LOW);  
+
+
+      
+      
     }
-  } else if (motor == 2) {
-    while (millis() - tiempoInicio < duracion) {
-      for (int i = 3; i >= 0; i--) {
-        for (int pin = 0; pin < 4; pin++) {
-          digitalWrite(motor2Pins[pin], (i == pin) ? HIGH : LOW);
-        }
-        delay(5);
-      }
-    }
-  }
 
-  // Detener el motor
-  for (int pin = 0; pin < 4; pin++) {
-    digitalWrite(motor1Pins[pin], LOW);
-    digitalWrite(motor2Pins[pin], LOW);
-  }
+
+
+
 }
 
 void reiniciar() { //Funcion para reiniciar
   seleccion = 0;
+  tiempoInicio = tiempoInicio-5000;
+  SELECMOTOR = 0;
   lcd.clear();
+  lcd.setCursor(0,0);
   lcd.print(mensajeInicial);
-}
+  delay(100);
+  lcd.setCursor(0,1);
+  lcd.print(mensajeInicial2);
 
-void AUTORIZACION(void){ //Funcion para dar autorizacion para seguir el codigo.
-  DARPRODUCTO = HIGH;
-  DARPRODUCTO = digitalRead(obstaculoPin);
-  delay (500);
-  DARPRODUCTO = HIGH;
-  
 }
