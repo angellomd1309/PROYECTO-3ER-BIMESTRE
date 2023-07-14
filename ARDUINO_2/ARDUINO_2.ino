@@ -16,27 +16,36 @@ const int boton4Pin = 3;
 const int motor1Pins[] = {4, 5, 6, 7}; //Pines para los motores steper.
 const int motor2Pins[] = {8, 9, 10, 11}; 
 
-const int obstaculoPin = 12;
+const int obstaculoPin = 12; //Pin del detector de obstaculos del ARDUINO PRIMARIO.
 
-const int SIGNALOUTPUT3 = A0;
+const int SIGNALOUTPUT3 = A0; //Pines de salida digital para el ARDUINO PRIMARIO.
 const int SIGNALOUTPUT4 = A1;
 
-    int SELECMOTOR;
-      int pos = 0;
+    int SELECMOTOR; 
+    int pos = 0;
+/*
+ * ESTE ES UN CODIGO REPLICA DEL PRIMER CODIGO
+ * SALVO POR ALGUNOS CAMBIOS COMO LA ELIMINACION
+ * DE VARIABLES INNECESARIAS PARA ESTE SIGUIENTE CODIGO
+ * LIBRERIAS, Y TEXTOS, PERO ES MUY SIMILAR.
+ * POR LO QUE SE OPTO POR AHORRAR COMENTARIOS SALVO EN
+ * ALGUNAS VARIANTES QUE PODRIAN RESULTAR RARAS POR EL 
+ * LECTOR.
+ */ 
 
 void setup() {
 
-  // Configurar los pines de los botones como entradas
+
   pinMode(boton3Pin, INPUT_PULLUP);
   pinMode(boton4Pin, INPUT_PULLUP);
 
-  // Configurar los pines de los motores stepper como salidas
+
   for (int i = 0; i < 4; i++) {
     pinMode(motor1Pins[i], OUTPUT);
     pinMode(motor2Pins[i], OUTPUT);
   }
 
-  // Configurar el pin del detector de obstáculos como entrada
+
   pinMode(obstaculoPin, INPUT);
   pinMode(SIGNALOUTPUT3, OUTPUT);
   pinMode(SIGNALOUTPUT4, OUTPUT);  
@@ -59,7 +68,6 @@ void loop() {
     reiniciar();
     }  
     
-  // Verificar si se ha presionado algún botón
     if (digitalRead(boton4Pin) == LOW) {
     SELECMOTOR = 2;
     digitalWrite(SIGNALOUTPUT4, HIGH);
@@ -68,9 +76,6 @@ void loop() {
     delay(100);
     digitalWrite(SIGNALOUTPUT4, LOW);
   }
-
-
-    
 
   if (digitalRead(obstaculoPin) == HIGH) {
 
@@ -81,10 +86,6 @@ void loop() {
   
 
 void ejecutarMotor(void) {
-
-
-
-  
   
   int demora = 100;
 
@@ -212,9 +213,6 @@ void ejecutarMotor(void) {
       
     }
 
-
-
-
 }
 
 void reiniciar() { //Funcion para reiniciar
@@ -222,3 +220,18 @@ void reiniciar() { //Funcion para reiniciar
   SELECMOTOR = 0;
 
 }
+
+
+/* ATENCION, ESTE ES EL CODIGO SECUNDARIO DE ARDUINO,
+ * CONTROLA LOS BOTONES 3 Y 4,
+ * INCLUYENDO LOS MOTORES 3 Y 4, SI SE DESEARA
+ * IMPLEMENTAR ESTE CODIGO EN UN ARDUINO, SE RECOMIENDA
+ * USAR UN ARDUINO MEGA O GIGA EN SU DEFECTO, YA QUE
+ * ESTOS POSEEN UNA CANTIDAD DE PINES EXTREMA,
+ * O USAR UN EXPANSOR DE PINES, NO LO USAMOS AQUI
+ * YA QUE SOLO SE NOS LIMITABA A EXPANSORES I2C, Y SE
+ * DESCARTARON POR SU DIFICULTAD DE USO. 
+ * 
+ * CODIGO POR: Angello Gabriel Mansilla Dieguez.
+ */
+
