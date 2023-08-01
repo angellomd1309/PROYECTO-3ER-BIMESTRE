@@ -16,7 +16,7 @@ const int boton4Pin = 3;
 const int motor1Pins[] = {4, 5, 6, 7}; //Pines para los motores steper.
 const int motor2Pins[] = {8, 9, 10, 11}; 
 
-const int obstaculoPin = 12; //Pin del detector de obstaculos del ARDUINO PRIMARIO.
+const int obstaculoPin = A2; //Pin del detector de obstaculos del ARDUINO PRIMARIO.
 
 const int SIGNALOUTPUT3 = A0; //Pines de salida digital para el ARDUINO PRIMARIO.
 const int SIGNALOUTPUT4 = A1;
@@ -36,8 +36,8 @@ const int SIGNALOUTPUT4 = A1;
 void setup() {
 
 
-  pinMode(boton3Pin, INPUT_PULLUP);
-  pinMode(boton4Pin, INPUT_PULLUP);
+  pinMode(boton3Pin, INPUT);
+  pinMode(boton4Pin, INPUT);
 
 
   for (int i = 0; i < 4; i++) {
@@ -52,33 +52,30 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(boton3Pin) == LOW) {
+  if (digitalRead(boton3Pin) == HIGH) {
     SELECMOTOR = 1;
     digitalWrite(SIGNALOUTPUT3, HIGH);
-  }
-  if (SIGNALOUTPUT3,HIGH) {
-    delay(100);
+    delay(200);
     digitalWrite(SIGNALOUTPUT3, LOW);
-  }
 
+  }
 
   if (digitalRead(obstaculoPin) == HIGH) {
+    delay(100);    
     ejecutarMotor();
     SELECMOTOR = 0;
     reiniciar();
     }  
     
-    if (digitalRead(boton4Pin) == LOW) {
+    if (digitalRead(boton4Pin) == HIGH) {
     SELECMOTOR = 2;
     digitalWrite(SIGNALOUTPUT4, HIGH);
-    }
-  if (SIGNALOUTPUT4,HIGH) {
-    delay(100);
+    delay(200);
     digitalWrite(SIGNALOUTPUT4, LOW);
-  }
+    }
 
   if (digitalRead(obstaculoPin) == HIGH) {
-
+    delay(100);
     ejecutarMotor();
     SELECMOTOR = 0;    
     reiniciar();
@@ -87,11 +84,11 @@ void loop() {
 
 void ejecutarMotor(void) {
   
-  int demora = 100;
+  int demora = 2;
 
 
   if (SELECMOTOR == 1) {  
-  for (pos = 0; pos <= 10; pos += 1){
+  for (pos = 0; pos <= 1000; pos += 1){
 
   digitalWrite(4, HIGH); //PASO 1
   digitalWrite(5, LOW);
@@ -145,7 +142,7 @@ void ejecutarMotor(void) {
 
 
   else if (SELECMOTOR == 2) {  
-  for (pos = 0; pos <= 10; pos += 1){
+  for (pos = 0; pos <= 1000; pos += 1){
 
    digitalWrite(8, HIGH); //PASO 1
   digitalWrite(9, LOW);
@@ -219,6 +216,9 @@ void reiniciar() { //Funcion para reiniciar
   pos = 0;
   SELECMOTOR = 0;
 
+  digitalWrite(4, LOW);
+  digitalWrite(8, LOW);  
+
 }
 
 
@@ -234,4 +234,3 @@ void reiniciar() { //Funcion para reiniciar
  * 
  * CODIGO POR: Angello Gabriel Mansilla Dieguez.
  */
-
