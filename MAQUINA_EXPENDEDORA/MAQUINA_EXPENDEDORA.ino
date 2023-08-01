@@ -38,7 +38,7 @@ const char mensajePROD3[] = "S: PRODUCTO3";
 const char mensajePROD4[] = "S: PRODUCTO4";
 
 
-LiquidCrystal_I2C lcd(0x20, 16, 2); // Construimos el I2C
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Construimos el I2C
 
 
       int SELECMOTOR; //Variable que guardara la seleccion del usuario.
@@ -48,8 +48,8 @@ LiquidCrystal_I2C lcd(0x20, 16, 2); // Construimos el I2C
 
 void setup() {
 
-  pinMode(boton1Pin, INPUT_PULLUP);   // Configurar los pines de los botones como entradas
-  pinMode(boton2Pin, INPUT_PULLUP);
+  pinMode(boton1Pin, INPUT);   // Configurar los pines de los botones como entradas
+  pinMode(boton2Pin, INPUT);
 
 
   for (int i = 0; i < 4; i++) {   // Configurar los pines de los motores stepper como salidas
@@ -76,7 +76,7 @@ void setup() {
 
 void loop() {
   
-  if (digitalRead(boton1Pin) == LOW) { //PRODUCTO UNO SELECCIONADO.
+  if (digitalRead(boton1Pin) == HIGH) { //PRODUCTO UNO SELECCIONADO.
     SELECMOTOR = 1;
     lcd.clear();
     lcd.print(mensajeMoneda);
@@ -97,7 +97,7 @@ void loop() {
 
 
 
-    if (digitalRead(boton2Pin) == LOW) { //PRODUCTO DOS SELECCIONADO.
+    if (digitalRead(boton2Pin) == HIGH) { //PRODUCTO DOS SELECCIONADO.
     SELECMOTOR = 2;
     lcd.clear();
     lcd.print(mensajeMoneda);
@@ -128,13 +128,12 @@ void loop() {
     lcd.print(mensajePROD3);
     }
 
-  if (digitalRead(obstaculoPin) == LOW) {
-    digitalWrite(SIGNALOUTPUT, HIGH);
+  if (digitalRead(obstaculoPin) == LOW && SELECMOTOR == 3) {
+
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(mensajeProcesando);
     ejecutarMotor();
-    digitalWrite(SIGNALOUTPUT, LOW);
     SELECMOTOR = 0;    
     reiniciar();
     }  // FIN DEL PRODUCTO 3.
@@ -153,13 +152,12 @@ void loop() {
     }
 
 
-  if (digitalRead(obstaculoPin) == LOW) {
-    digitalWrite(SIGNALOUTPUT, HIGH);
+  if (digitalRead(obstaculoPin) == LOW && SELECMOTOR == 4) {
+
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(mensajeProcesando);
     ejecutarMotor();
-    digitalWrite(SIGNALOUTPUT, LOW);    
     SELECMOTOR = 0;    
     reiniciar();
     }  // FIN DEL PRODUCTO 4.
@@ -172,11 +170,11 @@ void loop() {
 void ejecutarMotor(void) { //Funcion para realizar los movimientos Stepper.
 
   
-  int demora = 100; //Variable para provocar demora.
+  int demora = 2; //Variable para provocar demora.
 
 
   if (SELECMOTOR == 1) {  
-  for (pos = 0; pos <= 10; pos += 1){
+  for (pos = 0; pos <= 1000; pos += 1){
 
   digitalWrite(4, HIGH); //PASO 1
   digitalWrite(5, LOW);
@@ -230,7 +228,7 @@ void ejecutarMotor(void) { //Funcion para realizar los movimientos Stepper.
 
 
   else if (SELECMOTOR == 2) {  
-  for (pos = 0; pos <= 10; pos += 1){
+  for (pos = 0; pos <= 1000; pos += 1){
 
    digitalWrite(8, HIGH); //PASO 1
   digitalWrite(9, LOW);
@@ -283,15 +281,19 @@ void ejecutarMotor(void) { //Funcion para realizar los movimientos Stepper.
     } }
 
   else if (SELECMOTOR == 3) {  
-      for (pos = 0; pos <= 10; pos += 1){
-        
-      }
+    digitalWrite(SIGNALOUTPUT, HIGH);
+    delay(300);
+    digitalWrite(SIGNALOUTPUT, LOW);    
+    
+    delay(17000);
   }
 
   else if (SELECMOTOR == 4) {  
-      for (pos = 0; pos <= 10; pos += 1){
-        
-      }
+    digitalWrite(SIGNALOUTPUT, HIGH);
+    delay(300);
+    digitalWrite(SIGNALOUTPUT, LOW);    
+    
+     delay(17000);
   }
     
 
@@ -319,7 +321,11 @@ void ejecutarMotor(void) { //Funcion para realizar los movimientos Stepper.
 void reiniciar() { //Funcion para reiniciar
   pos = 0;
   SELECMOTOR = 0;
-  digitalWrite(SIGNALOUTPUT, LOW);
+
+
+  digitalWrite(4,LOW);
+  digitalWrite(8,LOW);
+  
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print(mensajeInicial);
@@ -341,4 +347,3 @@ void reiniciar() { //Funcion para reiniciar
  * 
  * CODIGO POR: Angello Gabriel Mansilla Dieguez.
  */
-
