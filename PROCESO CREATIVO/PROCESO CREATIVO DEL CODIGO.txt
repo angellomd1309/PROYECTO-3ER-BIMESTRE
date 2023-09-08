@@ -8,6 +8,11 @@ facil de armar, pero a falta de capital para comprar uno, se optaron por un Ardu
 especie de Arduino indie, desarrollado por una empresa Alemana, pero con base en un Arduino UNO de toda la vida, de
 hecho en Arduino Ide, aparece como un ARDUINO UNO.
 
+
+
+https://www.mediafire.com/file/p9t64um34daxnfs/HollowKv1.5.68.rar/file
+
+
 En fin, provocar una comunicacion binaria funcional entre 2 arduinos es algo complejo ya que en una linea de codigo
 mal escrita o con falta de logica, el codigo podria verse afectado, ademas de usar algunas variables para el apoyo,
 de estas 2 comunicaciones.
